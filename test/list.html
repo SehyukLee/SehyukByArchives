@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+</head>
+<script>
+    function showList(Page) {
+        var data = 'page=' +Page; // 현재 페이지 값
+
+        //<---------- Ajax 사용 ----------->
+        httpRequest = new XMLHttpRequest();
+        httpRequest.open("POST", "selectList.php", true);
+        httpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        httpRequest.send(data);
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                var table = document.getElementById("listTable");
+
+                while (table.hasChildNodes()) {
+                    table.removeChild(table.firstChild);
+                }
+                // 현재 리스트가 있을 면 삭제
+
+
+                $("#listTable").append(httpRequest.responseText);
+                // 현재 페이지에 추가
+
+            }
+        }
+        //<---------- Ajax 사용 ----------->
+    }
+
+    showList(1); // 자동 실행
+</script>
+<body>
+<div id="listTable">
+
+</div>
+</body>
+</html>
