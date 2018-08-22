@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .buttonStyle {
+            width: 50px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+<form action="test.php" method="get">
+    <div>
+        <input type="text" id="Calculate" name="textInputValue">
+    </div>
+    <div>
+        <input type="button" value="CE" class="buttonStyle">
+        <input type="button" value="C" class="buttonStyle" onclick="ClearValue()">
+        <input type="button" value="DEL" class="buttonStyle" onclick="deleteValue()">
+        <input type="button" value="/" class="buttonStyle" onclick="inputValue(this.value)">
+    </div>
+    <div>
+        <input type="button" value="7" class="buttonStyle" onclick="inputValue(this.value)">
+        <input type="button" value="8" class="buttonStyle" onclick="inputValue(this.value)">
+        <input type="button" value="9" class="buttonStyle" onclick="inputValue(this.value)">
+        <input type="button" value="*" class="buttonStyle" onclick="inputValue(this.value)">
+    </div>
+    <div>
+        <input type="button" value="4" class="buttonStyle" onclick="inputValue(this.value)">
+        <input type="button" value="5" class="buttonStyle" onclick="inputValue(this.value)">
+        <input type="button" value="6" class="buttonStyle" onclick="inputValue(this.value)">
+        <input type="button" value="-" class="buttonStyle" onclick="inputValue(this.value)">
+    </div>
+    <div>
+        <input type="button" value="1" class="buttonStyle" onclick="inputValue(this.value)">
+        <input type="button" value="2" class="buttonStyle" onclick="inputValue(this.value)">
+        <input type="button" value="3" class="buttonStyle" onclick="inputValue(this.value)">
+        <input type="button" value="+" class="buttonStyle" onclick="inputValue(this.value)">
+    </div>
+    <div>
+        <input type="button" value="0" class="buttonStyle" onclick="inputValue(this.value)">
+        <input type="submit" value="제출" class="buttonStyle">
+    </div>
+</form>
+<script>
+    function inputValue(NumAndCal) {
+        document.getElementById("Calculate").value = document.getElementById("Calculate").value + NumAndCal;
+    }
+
+    function deleteValue() {
+        var count = "";
+
+        for(var i = 0; i < document.getElementById("Calculate").value.length; i++){
+            if(i != document.getElementById("Calculate").value.length - 1){
+                var count = count + document.getElementById("Calculate").value[i]
+            }
+        }
+
+        document.getElementById("Calculate").value = count;
+    }
+
+    function ClearValue() {
+        document.getElementById("Calculate").value = "";
+    }
+</script>
+</body>
+</html>
