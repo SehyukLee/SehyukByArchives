@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .title_div {
+            border: 1px solid black;
+            width: 800px;
+            height: 50px;
+            color: white;
+            font-size: x-large;
+            text-align: center;
+            background-color: darkblue;
+        }
+
+        .body_div {
+            border: 1px solid black;
+            width: 800px;
+            height: 580px;
+        }
+
+        .img_size {
+            width: 100px;
+            height: 112px;
+        }
+
+        .start_button {
+            width: 80px;
+            height: 40px;
+        }
+        .body_timer {
+            border: 1px solid black;
+            width: 800px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+<!-- 타이틀 -->
+<div id="title_div">
+    카드 그림 맞추기 2wdj 1201224 이세혁
+</div>
+<!-- 타이틀 -->
+
+<!-- 타이머 및 게임시작버튼 -->
+<div align="center" class="body_timer" id="timer">
+    240초
+    <input type="button" value="게임시작" onclick="gameStart()" class="start_button">
+</div>
+<!-- 타이머 및 게임시작버튼 -->
+
+<!-- 카드 -->
+<div  class="body_div" align="center">
+    <div id="div1">
+        <img src="background.gif" class="img_size" id="img1" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img2" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img3" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img4" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img5" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img6" onclick="choiceCard(this.id)">
+    </div>
+    <div id="div2">
+        <img src="background.gif" class="img_size" id="img7" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img8" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img9" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img10" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img11" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img12" onclick="choiceCard(this.id)">
+    </div>
+    <div id="div3">
+        <img src="background.gif" class="img_size" id="img13" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img14" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img15" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img16" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img17" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img18" onclick="choiceCard(this.id)">
+    </div>
+    <div id="div4">
+        <img src="background.gif" class="img_size" id="img19" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img20" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img21" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img22" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img23" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img24" onclick="choiceCard(this.id)">
+    </div>
+    <div id="div5">
+        <img src="background.gif" class="img_size" id="img25" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img26" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img27" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img28" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img29" onclick="choiceCard(this.id)">
+        <img src="background.gif" class="img_size" id="img30" onclick="choiceCard(this.id)">
+    </div>
+</div>
+<div>
+    <ul id="rank">
+
+    </ul>
+</div>
+<!-- 카드 -->
+
+<script language="JavaScript">
+    var SetTime = 240;       // 타이머 시작 시간
+    var choiceCount = 0;     // 카드 선택 횟수
+    var oneChoiceCard;      // 첫번째 뽑은 카드이미지의 id
+    var twoChoiceCard;      // 두번째 뽑은 카드이미지의 id
+    var cardValue;
+
+    function gameStart() {
+        var Timer = setInterval(function () {
+            SetTime--;  // 1초씩 감소
+            document.getElementById("timer").firstChild.nodeValue = SetTime + "초"; // 변경된 시간 보여주기
+
+            if(SetTime == 0){
+                clearInterval(Timer);
+                alert("실패... 다시 도전하세요.")
+            }
+            // 0초가되면 게임 종료
+
+            if(document.getElementById("div1").childElementCount == 0
+                && document.getElementById("div2").childElementCount == 0
+                && document.getElementById("div3").childElementCount == 0
+                && document.getElementById("div4").childElementCount == 0
+                && document.getElementById("div5").childElementCount == 0){
+                alert("성공하셨습니다. 걸린 시간: " + (60-SetTime) + "초" );
+                clearInterval(Timer);
+
+                ranking(60-SetTime);
+            }
+            // 카드가 모두 삭제되면 게임 종료
+        }, 1000);
+        // 타이머 1초마다 작동
+    }
+
+    function choiceCard(ElementById) {
+        // ElementById는 선택한 카드이미지의 아이디
+
+        if(SetTime == 240){
+            alert("게임 시작버튼을 누르세요!!");
+        }
+        else{
+
+            document.getElementById(ElementById).src = "CardImg_" + randomCard + ".gif";
+            // 선택한 이미지에 랜덤값으로 받은 값을 이용하여 새로운 카드 이미지로 변경
+
+            if(choiceCount == 0){
+                oneChoiceCard = ElementById;
+            }
+            // 첫번째 선택한 이미지의 아이디 저장
+
+            if(choiceCount == 1){
+                twoChoiceCard = ElementById;
+            }
+            // 두번째 선택한 이미지의 아이디 저장
+
+            if(choiceCount == 2){
+                // 두번째 선택시 삭제되면 두번째 선택 이미지가 사용자가 보지 못하고 제거 되기 때문에
+                // 세번째 선택시 제거되도록 함
+                if(document.getElementById(oneChoiceCard).src == document.getElementById(twoChoiceCard).src) {
+                    document.getElementById(oneChoiceCard).remove();
+                    document.getElementById(twoChoiceCard).remove();
+                }
+                // 첫번째 선택한 이미지와 두번째 선택한 이미지가 같다면 두 이미지 삭제
+                else{
+                    document.getElementById(oneChoiceCard).src = "background.gif";
+                    document.getElementById(twoChoiceCard).src = "background.gif";
+                }
+                // 그 외의 경우 다시 원래 이미지로 변경
+
+                oneChoiceCard = ElementById;
+                // 세번째 선택한 경우이므로 다시 첫번째 선택으로 변경
+
+                choiceCount = 0;
+                // 반복되도록 초기화
+            }
+
+            choiceCount++;
+        }
+    }
+
+    function ranking(time) {
+        var rank = 1;
+        var newLi = document.createElement("li");
+        newLi.value = rank + "순위: " + time;
+        rank++;
+
+        document.getElementById("rank").appendChild(newLi);
+    }
+
+    function cardInfo() {
+        for(var i = 0; i < 15; i++){
+            var randomCard = Math.floor(Math.random() * (15 - 1)) + 1;
+            // 1 ~ 15의 숫자를 램덤으로 1가지 선택
+
+            cardValue[i] = randomCard;
+
+            for(var j = 0; j < i; j++){
+                if(cardValue[j] == cardValue[i]){
+                    i--;
+                    break;
+                }
+            }
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>자바스크립트 기말고사 답안지</title>
+</head>
+<style>
+    #TreeDisplay {
+        width: 400px;
+        height: 200px;
+        padding: 10px;
+        margin: 0px 0px 0px 0px;
+        border: 1px solid #aaaaaa;
+        float: left;
+    }
+
+    #InputDisplay {
+        width: 200px;
+        height: 200px;
+        padding: 10px;
+        margin: 0px 0px 0px 0px;
+        border: 1px solid #aaaaaa;
+        float: left;
+    }
+
+    #BoxDisplay {
+        width: 622px;
+        height: 300px;
+        padding: 10px;
+        margin: 0px 0px 0px 0px;
+        border: 1px solid #aaaaaa;
+        float: left;
+    }
+
+    .InnerBoxDisplay {
+        width: 150px;
+        height: 280px;
+        padding: 0px;
+        margin: 0px 0px 0px 0px;
+        border: 1px solid #aaaaaa;
+        float: left;
+    }
+
+    .CarImg {
+        width: 120px;
+        height: 70px;
+    }
+
+    .textStyle1 {
+        text-indent: 20px;
+        font-size: 12px;
+        color: blue;
+        font-style: oblique;
+    }
+
+    .textStyle2 {
+        font-size: 10px;
+    }
+</style>
+<script>
+    // 상속관계를 이용하여 차량 객체를 정의
+
+    function Product(argPrice, argYear) {
+        this.model;
+        this.type;
+        this.price = argPrice;
+        this.year = argYear;
+        this.id;
+        this.imgSrc;
+    }
+
+    function Suv(argPrice, argYear) {
+        Product.call(this, argPrice, argYear);
+
+        this.Price = argPrice;
+        this.year = argYear;
+
+
+    }
+
+    function Sedan(argPrice, argYear) {
+        Product.call(this, argPrice, argYear);
+
+        this.Price = argPrice;
+        this.year = argYear;
+    }
+
+    function X5(argPrice, argYear) {
+        Suv.call(this, argPrice, argYear);
+
+        this.Price = argPrice;
+        this.year = argYear;
+    }
+
+    function X3(argPrice, argYear) {
+        Suv.call(this, argPrice, argYear);
+
+        this.Price = argPrice;
+        this.year = argYear;
+    }
+
+    function M5(argPrice, argYear) {
+        Sedan.call(this, argPrice, argYear);
+
+        this.Price = argPrice;
+        this.year = argYear;
+    }
+
+    function M3(argPrice, argYear) {
+        Sedan.call(this, argPrice, argYear);
+
+        this.Price = argPrice;
+        this.year = argYear;
+    }
+
+    Suv.prototype.__proto__ = Object.create(Product.prototype);
+    Sedan.prototype.__proto__ = Object.create(Product.prototype);
+    X5.prototype.__proto__ = Object.create(Suv.prototype);
+    X3.prototype.__proto__ = Object.create(Suv.prototype);
+    M5.prototype.__proto__ = Object.create(Sedan.prototype);
+    M3.prototype.__proto__ = Object.create(Sedan.prototype);
+
+
+    // 버튼 클릭시 동작...즉 프로그램 시작 함수 이것지?
+    function createCar() {
+        var modelName = document.getElementById('inputModel').value;
+//        var yearValue = document.getElementById('inputYear').value;
+//        var PriceValue = document.getElementById('inputPrice').value;
+
+        var CreateImg = document.createElement('img');
+
+        // img Element를 생성 후 id 속성 추가
+
+        if (modelName == "X5") {
+            CreateImg.setAttribute('id', 'X5_img_file');
+            CreateImg.setAttribute('src', 'x5.gif');
+        } else if (modelName == "X3") {
+            CreateImg.setAttribute('id', 'X3_img_file');
+            CreateImg.setAttribute('src', 'x3.gif');
+        } else if (modelName == "M5") {
+            CreateImg.setAttribute('id', 'M5_img_file');
+            CreateImg.setAttribute('src', 'm5.gif');
+        } else if (modelName == "M3") {
+            CreateImg.setAttribute('id', 'M3_img_file');
+            CreateImg.setAttribute('src', 'm3.gif');
+        } else {
+            alert("잘못된 모델명입니다.");
+        }
+        // 모델명에 따라서 이미지 삽입
+
+        document.getElementById('InputDisplay').appendChild(CreateImg);
+        // 만든 Element 자식으로 넣기
+        //document.getElementById('img_file').classList.add('CarImg');
+
+    }
+ //       document.getElementById("X5_img_file").setAttribute("draggable", "true");
+//        drag = document.getElementById('img_file');
+//
+//        document.getElementById('img_file').setAttribute('draggable', 'true');
+//
+//        drag.addEventListener('dragstart', function () {
+//           event.DataTransfer.setData("text", event.target);
+//        });
+//
+//        document.getElementById('BoxDisplay').addEventListener('dragover', function () {
+//            event.preventDefault();
+//        })
+//
+//        document.getElementById('X5Display').addEventListener("drop", function () {
+//            event.preventDefault();
+//            var eventTarget = event.DataTransfer.getDate("text");
+//            event.target.appendChild(document.getElementById(eventTarget.id));
+//        })
+</script>
+<body>
+<div>
+    <!-- 자동차 재고현황 트리 출력 DIV-->
+    <div id="TreeDisplay">
+        자동차 재고현황<br>
+        <p class="textStyle1">SUV</p>
+            <ul id="SuvList"></ul>
+        <p class="textStyle1">세단</p>
+            <ul id="SedanList"></ul>
+    </div>
+    <!-- 자동차 정보 입력창 DIV-->
+    <div id="InputDisplay">
+        모델: <input type="text" id="inputModel" size="12"> <br>
+        연식: <input type="text" id="inputYear" size="12"><br>
+        가격: <input type="text" id="inputPrice" size="12"><br>
+
+        <input type="button" value="입력하기" onclick="createCar()" ><br>
+
+        <!-- 버튼 클릭시 입력된 모델 값에 따라 차량 모델의 이미지를 아래 Div에 삽입 DIV-->
+        <!-- 삽입 된 이미지는 드래그 앤 드롭 기능을 제공하며, X5Display, X3Display, M5Display, M3Display
+              div에만 드롭 가능. -->
+        <div id="CreatedCar" align="center"></div>
+    </div>
+</div>
+<!-- 드랍 이미지 출력 DIV-->
+<div id="BoxDisplay">
+    <div id="X5Display" class="InnerBoxDisplay" ><p align="center">X5</p><br></center></div>
+    <div id="X3Display" class="InnerBoxDisplay" ><p align="center">X3</p><br></div>
+    <div id="M5Display" class="InnerBoxDisplay" ><p align="center">M5</p><br></div>
+    <div id="M3Display" class="InnerBoxDisplay" ><p align="center">M3</p><br></div>
+</div>
+</body>
+</html>

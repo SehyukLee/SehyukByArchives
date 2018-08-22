@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 스타일 시트 -->
+    <style>
+        .div_base {
+            display: inline-block;
+        }
+        #title_div {
+            border: 1px solid black;
+            width: 913px;
+            height: 40px;
+            color: white;
+            font-size: x-large;
+            text-align: center;
+            background-color: darkblue;
+        }
+        .div_with_whole_width {
+            border: 1px solid black;
+            width: 913px;
+            height: 50px;
+        }
+        .human_img {
+            border: 1px solid black;
+            width: 300px;
+            height: 300px;
+        }
+        .computer_img {
+            border: 1px solid black;
+            width: 300px;
+            height: 300px;
+        }
+        .status {
+            width: 300px;
+            height: 30px;
+            border: 1px solid black;
+            font-size: large;
+            color: white;
+            text-align: center;
+        }
+        .title_img {
+            width: 300px;
+            background: antiquewhite;
+            vertical-align: middle;
+            text-align: center;
+            display: table-cell;
+        }
+        #result_div {
+            color: blue;
+            font-size: xx-large;
+            text-align: center;
+        }
+        #timer_div {
+            color: red;
+            font-size: xx-large;
+            text-align: center;
+        }
+    </style>
+    <!-- 스타일 시트 -->
+</head>
+
+<body>
+
+<!-- 타이틀  [1] -->
+<div id="title_div">
+    2016학년도 1학기 JAVASCRIPT 기말고사(가위바위보 게임) (C)정영철 교수
+</div>
+
+<!-- 사용자 입력 이미지 [2] -->
+<div>
+    <div>가위 바위 보 중 하나를 고르세요~~</div>
+    <div>
+        <!-- 사용자 선택: 가위 -->
+        <img id="input_img_scissors" src="human_scissors.gif" width="100px" height="100px"
+             onclick="test.makeTurn('scissors')">
+
+        <!-- 사용자 선택: 바위 -->
+        <img id="input_img_rock" src="human_rock.gif" width="100px" height="100px"
+             onclick="test.makeTurn('rock')">
+
+        <!-- 사용자 선택: 보 -->
+        <img id="input_img_paper" src="human_paper.gif" width="100px" height="100px"
+             onclick="test.makeTurn('paper')">
+
+        <!-- 타이머 스타트 -->
+        <img src="gamestart.jpg" width="150px" height="80px"
+             onclick="test.startGame()" style="margin-left: 300px;">
+
+        <!-- 타이머 종료 -->
+        <img src="finishgame.jpg" width="150px" height="80px"
+             onclick="test.stopGame()">
+    </div>
+</div>
+
+<!-- 사용자 : 선택된 "가위 바위 보" 이미지 [3] -->
+<div id="human" class="div_base">
+    <div id="human_status" class="status"></div>
+    <div class="title_img">Human</div>
+    <div id="human_img" class="human_img"></div>
+</div>
+
+<!-- VS 이미지 [4] -->
+<div class="div_base"><img src="vs.gif"></div>
+
+<!-- 컴퓨터 : 선택된 "가위 바위 보" 이미지 [5] -->
+<div id="computer" class="div_base">
+    <div id="computer_status" class="status"></div>
+    <div class="title_img">Computer</div>
+    <div id="computer_img" class="computer_img"></div>
+</div>
+
+<!-- 결과 화면 [6] -->
+<div id="result_div" class="div_with_whole_width">
+</div>
+
+<!-- Timer [7]-->
+<div id="timer_div" class="div_with_whole_width"></div>
+
+<script>
+    function RockPaperScissors(argTypeOfRps, argIsComputer) {
+        this.img_obj = document.createElement("img");   // 동적으로 생성된 html "img"오브젝트를 저장
+        this.typeOfRps = argTypeOfRps;                   // rock, paper, scissors 중 하나를 문자열값으로 저장
+
+        // 사용자이면
+        if(argIsComputer == false){
+            this.img_obj.src = "human_" + this.typeOfRps + ".gif";       // 사용자의 이미지를 연결
+        }
+        // 컴퓨터이면
+        else{
+            this.img_obj.src = "computer_" + this.typeOfRps + ".gif";    // 컴퓨터의 이미지를 연결
+        }
+
+        // 현재 저장된 값을 반환
+        this.valueOf = function() {
+            return this.typeOfRps;
+        }
+    }
+
+    function Player(argIsComputer) {
+        this.rockPaperScissors = new Array();                                             // 배열 생성
+        this.rockPaperScissors.push(new RockPaperScissors("scissors", argIsComputer));   // 가위 객체 생성 후 배열에 추가
+        this.rockPaperScissors.push(new RockPaperScissors("rock", argIsComputer));        // 바위 객체 생성 후 배열에 추가
+        this.rockPaperScissors.push(new RockPaperScissors("paper", argIsComputer));       // 보 객체 생성 후 배열에 추가
+        var winCount = 0;       // 승리 회수
+        var loseCount = 0;      // 패배 회수
+        var drawCount = 0;      // 무승부 회수
+
+        this.currrentRSPValue;  // 현재 선택된 값을 저장하는 변수
+
+        // 승리 할 시 승리 회수 증가
+        this.increaseWinCount = function() {
+            winCount++;
+        }
+
+        // 패배 할 시 패배 회수 증가
+        this.increaseLoseCount = function() {
+            loseCount++;
+        }
+
+        // 무승부 시 무승부 회수 증가
+        this.increaseDrawCount = function() {
+            drawCount++;
+        }
+
+        // 승리 회수 값을 반환
+        this.getWinCount = function() {
+            return winCount;
+        }
+
+        // 패배 회수 값을 반환
+        this.getLoseCount = function() {
+            return loseCount;
+        }
+
+        // 무승부 회수 값을 반환
+        this.getDrawCount = function() {
+            return drawCount;
+        }
+
+        // 승리, 패배, 무승부 회수를 초기화
+        this.setToZeroForWinLoseDrawCount = function() {
+            winCount = 0;
+            loseCount = 0;
+            drawCount = 0;
+        }
+
+        // 랜덤으로 가위, 바위, 보 중 하나를 반환
+        this.getRPS = function() {
+            this.random = parseInt(Math.random() * 3);
+            this.currentRSPValue = this.rockPaperScissors[this.random];
+
+            return this.currentRSPValue;
+        }
+
+        // 선택한 값을 통해서 그 이미지를 반환
+        this.setRPS = function(argRPS) {
+            var select;
+
+            if(argRPS == 'rock'){
+                select = 0;
+            }
+            else if(argRPS == 'paper'){
+                select = 1;
+            }
+            else{
+                select = 2;
+            }
+
+            this.currentRSPValue = this.rockPaperScissors[select];
+
+            return this.currentRSPValue;
+        }
+    }
+
+    function RPSGame() {
+        var playerHuman = new Player(false);               // 사용자 객체 생성
+        var playerComputer = new Player(true);             // 컴퓨터 객체 생성
+        var t_div = document.getElementById('timer_div'); // 시간 칸에 접근
+        var rpsTimer = new timer(t_div);                    // 시간 객체 생성
+
+        // 결과에 따라 배경색 변경 및 전적을 기록
+        this.status_bar_update = function(argStatus, argIsComputer, argObj) {
+            if(argIsComputer == true){
+                if(argStatus == "win"){
+                    argObj.style.backgroundColor = "blue";
+                }
+                else if(argStatus == "lose"){
+                    argObj.style.backgroundColor = "red";
+                }
+                else{
+                    argObj.style.backgroundColor = "black";
+                }
+
+                var stats = playerComputer.getWinCount() + "승" + playerComputer.getDrawCount() + "무"
+                    + playerComputer.getLoseCount() + "패";
+                argObj.innerHTML = stats;
+            }
+            else{
+                if(argStatus == "win"){
+                    argObj.style.backgroundColor = "blue";
+                }
+                else if(argStatus == "lose"){
+                    argObj.style.backgroundColor = "red";
+                }
+                else{
+                    argObj.style.backgroundColor = "black";
+                }
+
+                var stats = playerHuman.getWinCount() + "승" + playerHuman.getDrawCount() + "무" + playerHuman.getLoseCount() + "패";
+                argObj.innerHTML = stats;
+            }
+        }
+
+        // 게임을 시작하면 전 게임의 기록 제거 및 시간 초기화
+        this.startGame = function() {
+            playerHuman.setToZeroForWinLoseDrawCount();
+            playerComputer.setToZeroForWinLoseDrawCount();
+            rpsTimer.startTimer();
+        }
+
+        // 게임을 끝내면 시간 정지
+        this.stopGame = function() {
+            rpsTimer.stopTimer();
+        }
+
+        this.makeTurn = function(argRpsOfHuman) {
+            var human_Select = playerHuman.setRPS(argRpsOfHuman);              // 사용자가 선택한 값
+            var computer_Select = playerComputer.getRPS();                     // 컴퓨터가 선택한 값
+
+            var h_img_div = document.getElementById('human_img');            // 사용자 선택 결과 칸에 접근
+            var c_img_div = document.getElementById('computer_img');         // 컴퓨터 선택 결과 칸에 접근
+            var c_status_div = document.getElementById('computer_status');   // 컴퓨터 전적 칸에 접근
+            var h_status_div = document.getElementById('human_status');      // 사용자 전적 칸에 접근
+            var r_div = document.getElementById('result_div');               // 게임 결과 칸에 접근
+
+            // 사용자 선택 결과 칸에 이미 이미지가 있으면 삭제
+            if(h_img_div.firstElementChild != null){
+                h_img_div.removeChild(h_img_div.firstElementChild);
+            }
+            // 사용자 선택 결과 칸에 사용자가 선택한 값 이미지 입력
+            h_img_div.appendChild(human_Select.img_obj);
+
+            // 컴퓨터 선택 결과 칸에 이미 이미지가 있으면 삭제
+            if(c_img_div.firstElementChild != null){
+                c_img_div.removeChild(c_img_div.firstElementChild);
+            }
+            // 컴퓨터 선택 결과 칸에 컴퓨터가 선택한 값 이미지 입력
+            c_img_div.appendChild(computer_Select.img_obj);
+
+            // 게임 승패, 무승부 판별 및 전적 계산
+            if((playerHuman.currentRSPValue == 'rock' && playerComputer.currentRSPValue == 'paper') ||
+                (playerHuman.currentRSPValue == 'paper' && playerComputer.currentRSPValue == 'scissors') ||
+                (playerHuman.currentRSPValue == 'scissors' && playerComputer.currentRSPValue == 'rock')){
+                playerHuman.increaseLoseCount();
+                playerComputer.increaseWinCount();
+                this.status_bar_update("win", true, c_status_div);
+                this.status_bar_update("lose", false, h_status_div);
+                r_div.innerHTML = "lose";
+            }
+            else if((playerHuman.currentRSPValue == 'paper' && playerComputer.currentRSPValue == 'rock') ||
+                (playerHuman.currentRSPValue == 'scissors' && playerComputer.currentRSPValue == 'paper') ||
+                (playerHuman.currentRSPValue == 'rock' && playerComputer.currentRSPValue == 'scissors')){
+                playerHuman.increaseWinCount();
+                playerComputer.increaseLoseCount();
+                this.status_bar_update("lose", true, c_status_div);
+                this.status_bar_update("win", false, h_status_div);
+                r_div.innerHTML = "win";
+            }
+            else{
+                playerHuman.increaseDrawCount();
+                playerComputer.increaseDrawCount();
+                this.status_bar_update("draw", true, c_status_div);
+                this.status_bar_update("draw", false, c_status_div);
+                r_div.innerHTML = "draw";
+            }
+        }
+    }
+    function timer(argDivObj) {
+        var hour = 0;
+        var minute = 0;
+        var second = 0;
+        var cycle = 0;
+
+        // 매초마다 경과 시간을 출력
+        this.update = function() {
+            if(second == 60){
+                second = 0;
+                minute++;
+            }
+
+            if(minute == 60){
+                minute = 0;
+                hour++;
+            }
+            argDivObj.innerHTML = hour + ":" + minute + ":" + second;
+
+            second++;
+        }
+
+        // 타이머 시작
+        this.startTimer = function() {
+            cycle++;
+            if(cycle == 1){
+                timer_Move = setInterval(this.update, 1000);
+            }
+        }
+
+        // 타이머 종료
+        this.stopTimer = function() {
+            cycle = 0;
+            hour = 0;
+            minute = 0;
+            second = 0;
+            clearInterval(timer_Move);
+        }
+    }
+
+    var test = new RPSGame();
+</script>
+
+</body>
+</html>

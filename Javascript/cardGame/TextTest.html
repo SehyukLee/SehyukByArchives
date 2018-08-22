@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .title_div {
+            border: 1px solid black;
+            height: 50px;
+            color: white;
+            font-size: x-large;
+            text-align: center;
+            background-color: darkblue;
+        }
+        /* 제목 스타일*/
+
+        .img_style {
+            width: 110px;
+            height:120px;
+        }
+        /* 이미지 스타일*/
+
+        .start_button {
+            width: 63px;
+            height: 50px;
+            text-align: center;
+        }
+        /* 버튼 스타일*/
+
+        .body_div {
+            border: 1px solid black;
+            width: 660px;
+            height: 620px;
+        }
+        /* 게임실행지 스타일*/
+
+        .fontColor {
+            font-size: large;
+            color: red;
+        }
+        /* 자신의 기록 스타일*/
+
+        .time_pole1 {
+            width: 56px;
+            height: 50px;
+            background-color: cornflowerblue;
+        }
+        /* 레벨 1 시간 스타일*/
+
+        .time_pole2 {
+            width: 6px;
+            height: 50px;
+            background-color: cornflowerblue;
+        }
+        /* 레벨 2 시간 스타일*/
+
+        .time_pole3 {
+            width: 1px;
+            height: 50px;
+            background-color: cornflowerblue;
+        }
+        /* 레벨 3 시간 스타일*/
+
+        .record {
+            font-size: large;
+            color: darkmagenta;
+        }
+        /* 기록 제목 스타일*/
+
+    </style>
+</head>
+<body>
+<script>
+    function card(cardNum) {
+        // 레벨에 따른 이미지 생성
+
+        var cardInfo = Array();  // 생성한 카드 이미지 Element 배열
+
+        if (cardNum == 1) {
+            // 레벨이 1일 때
+
+            cardNum = 4;  // 카드 이미지 개수 설정
+
+            for (var i = 0; i < 2; i++) {
+                var div = document.createElement("div");
+                div.id = "div" + (i + 1);
+                document.getElementById("inputImg").appendChild(div);
+            }
+            // 레벨에 따른 카드이미지를 넣을 div Element들을 생성 및 추가
+        }
+        else if (cardNum == 2) {
+            // 레벨 2일 때
+
+            cardNum = 18;   // 카드 이미지 개수 설정
+
+            for (var i = 0; i < 4; i++) {
+                var div = document.createElement("div");
+                div.id = "div" + (i + 1);
+                document.getElementById("inputImg").appendChild(div);
+            }
+            // 레벨에 따른 카드이미지를 넣을 div Element들을 생성 및 추가
+        }
+        else {
+            // 레벨 3일 때
+
+            cardNum = 30   // 카드 이미지 개수 설정
+
+            for (var i = 0; i < 5; i++) {
+                var div = document.createElement("div");
+                div.id = "div" + (i + 1);
+                document.getElementById("inputImg").appendChild(div);
+            }
+            // 레벨에 따른 카드이미지를 넣을 div Element들을 생성 및 추가
+        }
+
+        var randomArr = Array();    // 1에서 카드 이미지 개수 사이의 랜덤값 배열
+
+        for(var i = 0; i < cardNum; i++) {
+            if (cardNum == 4) {
+                randomArr[i] = Math.floor(Math.random() * (4 - 1 + 1)) + 1;
+            }
+            else if (cardNum == 18) {
+                randomArr[i] = Math.floor(Math.random() * (18 - 1 + 1)) + 1;
+            }
+            else {
+                randomArr[i] = Math.floor(Math.random() * (30 - 1 + 1)) + 1;
+            }
+            // 레벨별 이미지 이름 랜덤값 생성
+
+            for (var j = 0; j < i; j++) {
+                if (randomArr[j] == randomArr[i]) {
+                    i--;
+                    break;
+                }
+            }
+            // 중복 값 제거
+        }
+
+        var CountArr = Array();   // 카드 이미지 값 배열
+
+        for (var j = 0; j < cardNum / 2; j++) {
+            if (cardNum == 4) {
+                var randomCardValue = Math.floor(Math.random() * (2 - 1 + 1)) + 1;
+            }
+            else if (cardNum == 18) {
+                var randomCardValue = Math.floor(Math.random() * (9 - 1 + 1)) + 1;
+            }
+            else {
+                var randomCardValue = Math.floor(Math.random() * (15 - 1 + 1)) + 1;
+            }
+            // 레벨별 랜덤값 생성
+
+            CountArr[j] = randomCardValue;
+            // 이미지 value 랜덤값 저장
+
+            for (var k = 0; k < j; k++) {
+                if (CountArr[k] == CountArr[j]) {
+                    j--;
+                    break;
+                }
+            }
+            // 중복 값 제거
+        }
+
+        for (var i = 0; i < cardNum; i++) {
+            cardInfo[i] = document.createElement("img");
+            cardInfo[i].src = "background.gif";
+            cardInfo[i].id = "img" + (i + 1);
+            cardInfo[i].className = "img_style";
+        }
+        // 카드 이미지 element 생성 및 element에 속성 추가
+
+        var num = 0;          // 카드 순서 랜덤 변수
+
+        for (var i = 0, j = 0; i < randomArr.length; i++, j++) {
+            num = randomArr[i] - 1;
+            cardInfo[num].value = CountArr[j];
+            i++;
+            num = randomArr[i] - 1;
+            cardInfo[num].value = CountArr[j];
+        }
+        // 순서가 랜덤인 2개의 카드에 동일한 값 넣기
+
+        if (cardNum == 4) {
+            // 레벨 1일 때
+
+            for (var s = 0; s < cardNum; s++) {
+                if (s >= 2) {
+                    document.getElementById("div2").appendChild(cardInfo[s]);
+                }
+                else {
+                    document.getElementById("div1").appendChild(cardInfo[s]);
+                }
+            }
+            // 화면에 카드 이미지 출력
+        }
+        else if (cardNum == 18) {
+            // 레벨 2일 때
+
+            for (var s = 0; s < cardNum; s++) {
+                if (s >= 6) {
+                    document.getElementById("div2").appendChild(cardInfo[s]);
+                }
+                else if (s >= 12) {
+                    document.getElementById("div3").appendChild(cardInfo[s]);
+                }
+                else {
+                    document.getElementById("div1").appendChild(cardInfo[s]);
+                }
+            }
+            // 화면에 카드 이미지 출력
+        }
+        else {
+            // 레벨 3일 때
+
+            for (var s = 0; s < cardNum; s++) {
+                if (s >= 6) {
+                    document.getElementById("div2").appendChild(cardInfo[s]);
+                }
+                else if (s >= 12) {
+                    document.getElementById("div3").appendChild(cardInfo[s]);
+                }
+                else if (s >= 18) {
+                    document.getElementById("div4").appendChild(cardInfo[s]);
+                }
+                else if (s >= 24) {
+                    document.getElementById("div5").appendChild(cardInfo[s]);
+                }
+                else {
+                    document.getElementById("div1").appendChild(cardInfo[s]);
+                }
+            }
+            // 화면에 카드 이미지 출력
+        }
+    }
+
+    function gameStart() {
+        // 게임시작 버튼을 누르면 실행
+
+        var child = document.getElementById("inputImg");      // 이미지가 들어갈 Element
+        var timeChild = document.getElementById("timePole");  // 시간 표시가 들어갈 Element
+
+        while (child.hasChildNodes()) {
+            child.removeChild(child.firstChild);
+        }
+        // 이미 이미지 Element가 있으면 모두 삭제
+
+        while (timeChild.hasChildNodes()) {
+            timeChild.removeChild(timeChild.firstChild);
+        }
+        // 이미 시간 표시가 있으면 모두 삭제
+
+        do {
+            var level = prompt("레벨을 선택하세요. 레벨은 1 ~ 3 입니다.");
+        } while (level != 1 && level != 2 && level != 3);
+        // 사용자로부터 레벨을 입력 받음
+
+        var timerElement = Array();   // 시간 막대
+
+        if (level == 1) {
+            // 레벨 1일 때
+
+            card(level);         // 카드 이미지 생성
+            var setTime = 10;    // 게임 시간
+            var Td_id = 10;      // 시간 막대 아이디
+
+            for (var i = 0; i < setTime; i++, Td_id--) {
+                timerElement[i] = document.createElement("td");
+                timerElement[i].className = "time_pole1";
+                timerElement[i].id = "td" + Td_id;
+                document.getElementById("timePole").appendChild(timerElement[i]);
+            }
+            // 시간 표시기 생성
+        }
+        else if (level == 2) {
+            // 레벨 2일 때
+
+            card(level);         // 카드 이미지 생성
+            var setTime = 60;    // 게임 시간
+            var Td_id = 60;      // 시간 막대 아이디
+
+            for (var i = 0; i < setTime; i++, Td_id--) {
+                timerElement[i] = document.createElement("td");
+                timerElement[i].className = "time_pole2";
+                timerElement[i].id = "td" + Td_id;
+                document.getElementById("timePole").appendChild(timerElement[i]);
+            }
+            // 시간 표시기 생성
+        }
+        else {
+            // 레벨 3일 때
+
+            card(level);         // 카드 이미지 생성
+            var setTime = 120;   // 게임 시간
+            var Td_id = 120;     // 시간 막대 아이디
+
+            for (var i = 0; i < setTime; i++, Td_id--) {
+                timerElement[i] = document.createElement("td");;
+                timerElement[i].className = "time_pole3";
+                timerElement[i].id = "td" + Td_id;
+                document.getElementById("timePole").appendChild(timerElement[i]);
+            }
+            // 시간 표시기 생성
+        }
+
+        cardCheck = 0;   // 카드 삭제 회수 초기화
+        alert("게임을 시작하겠습니다.");
+
+        var Timer = setInterval(function () {
+            setTime--;  // 1초씩 감소
+
+            document.getElementById("timePole").removeChild(document.getElementById("timePole").lastChild);
+            Td_id++;
+            // 남은 시간 화면에 출력
+
+
+            if(setTime == 0){
+                clearInterval(Timer);     // 타이머 종료
+                alert("실패... 다시 도전하세요.")
+
+                for (var i = 0; i < child.children.length ; i++) {
+                    for (var j = 0; j < child.children[i].children.length; j++) {
+                        child.children[i].children[j].removeAttribute("onclick");
+                    }
+                }
+                // 게임이 끝났음으로 모든 카드 이미지 클릭 이벤트 삭제
+
+                cardCheck = 0;            // 카드 삭제 횟수 초기화
+                choice = 0;               // 카드 선택 횟수 초기화
+                ClickImg.splice(0, 2);    // 선택한 카드 정보 삭제
+            }
+            // 남은 시간이 0이되면 게임 종료
+
+            if (level == 1) {
+                // 레벨 1일 때
+
+                if(cardCheck == 2){
+                    // 남은 카드가 없을 때
+
+                    for (var i = 0; i < child.children.length ; i++) {
+                        for (var j = 0; j < child.children[i].children.length; j++) {
+                            child.children[i].children[j].removeAttribute("onclick");
+                        }
+                    }
+                    // 게임이 끝났음으로 모든 카드 이미지 클릭 이벤트 삭제
+
+                    cardCheck = 0;          // 카드 삭제 횟수 초기화
+                    clearInterval(Timer);    // 타이머 종료
+                    alert("성공하셨습니다. 걸린 시간: " + (10 - setTime) + "초" );
+
+                    var userId = prompt("저장할 아이디를 입력하시오.");
+                    // 사용자로부터 저장할 아이디 입력받음
+
+                    if (userId == null) {
+                        alert("아이디를 입력하지 않았으므로 기록을 저장 할 수 없습니다.");
+                    }
+                    else {
+                        ranking((10-setTime), userId, level);
+                    }
+                    // 아이디를 입력하지 않으면 그대로 게임 종료
+                    // 아이디를 입력하면 기록을 저장
+                }
+            }
+            else if (level == 2) {
+                // 레벨 2일 때
+
+                if(cardCheck == 9){
+                    // 남은 카드가 없을 때
+
+                    for (var i = 0; i < child.children.length ; i++) {
+                        for (var j = 0; j < child.children[i].children.length; j++) {
+                            child.children[i].children[j].removeAttribute("onclick");
+                        }
+                    }
+                    // 게임이 끝났음으로 모든 카드 이미지 클릭 이벤트 삭제
+
+                    cardCheck = 0;          // 카드 삭제 횟수 초기화
+                    clearInterval(Timer);    // 타이머 종료
+                    alert("성공하셨습니다. 걸린 시간: " + (60-setTime) + "초" );
+
+                    var userId = prompt("저장할 아이디를 입력하시오.");
+                    // 사용자로부터 저장할 아이디 입력받음
+
+                    if (userId == null) {
+                        alert("아이디를 입력하지 않았으므로 기록을 저장 할 수 없습니다.");
+                    }
+                    else {
+                        ranking((60-setTime), userId, level);
+                    }
+                    // 아이디를 입력하지 않으면 그대로 게임 종료
+                    // 아이디를 입력하면 기록을 저장
+                }
+            }
+            else {
+                // 레벨 3일 때
+
+                if(cardCheck == 15){
+                    // 남은 카드가 없을 때
+
+                    for (var i = 0; i < child.children.length ; i++) {
+                        for (var j = 0; j < child.children[i].children.length; j++) {
+                            child.children[i].children[j].removeAttribute("onclick");
+                        }
+                    }
+                    // 게임이 끝났음으로 모든 카드 이미지 클릭 이벤트 삭제
+
+                    cardCheck = 0;          // 카드 삭제 횟수 초기화
+                    clearInterval(Timer);    // 타이머 종료
+                    alert("성공하셨습니다. 걸린 시간: " + (120-setTime) + "초" );
+
+                    var userId = prompt("저장할 아이디를 입력하시오.");
+                    // 사용자로부터 저장할 아이디 입력받음
+
+                    if (userId == null) {
+                        alert("아이디를 입력하지 않았으므로 기록을 저장 할 수 없습니다.");
+                    }
+                    else {
+                        ranking((120-setTime), userId, level);
+                    }
+                    // 아이디를 입력하지 않으면 그대로 게임 종료
+                    // 아이디를 입력하면 기록을 저장
+                }
+            }
+        }, 1000);
+        // 1초마다 작동
+
+        if (level == 1) {
+            // 레벨 1일 때
+
+            for (var i = 1; i <= 4; i++) {
+                document.getElementById("img" + i).setAttribute("onclick", "imgChange(this.id)");
+            }
+            // 생성된 4개의 이미지에 클릭 이벤트 추가
+        }
+        else if (level == 2) {
+            // 레벨 2일 때
+
+            for (var i = 1; i <= 18; i++) {
+                document.getElementById("img" + i).setAttribute("onclick", "imgChange(this.id)");
+            }
+            // 생성된 18개의 이미지에 클릭 이벤트 추가
+        }
+        else {
+            // 레벨 3일 때
+
+            for (var i = 1; i <= 30; i++) {
+                document.getElementById("img" + i).setAttribute("onclick", "imgChange(this.id)");
+            }
+            // 생성된 30개의 이미지에 클릭 이벤트 추가
+        }
+    }
+
+    var choice = 0;              // 카드 선택 횟수
+    var ClickImg = Array();      // 선택한 두개의 카드 정보
+    var cardCheck = 0;           // 카드 삭제 횟수
+
+    function imgChange (ElementId) {
+        // 카드 클릭시 실행
+
+        if (choice == 2) {
+            // 카드를 3번 클릭 시
+
+            if (ClickImg[0] == ClickImg[1]) {
+                // 선택한 두개의 카드 아이디가 같을 시
+
+                for(var i = 0; i < ClickImg.length; i++){
+                    document.getElementById(ClickImg[i]).src = "background.gif";
+                }
+                // 변경된 이미지를 다시 원래 이미지로 변경
+
+                ClickImg.splice(0, 2);
+                // 선택한 카드의 정보가 들어간 배열 속 값 삭제
+            }
+            else if (document.getElementById(ClickImg[0]).value == document.getElementById(ClickImg[1]).value) {
+                // 선택한 두개의 카드 값이 같을 시
+
+                document.getElementById(ClickImg[0]).src = "";
+                document.getElementById(ClickImg[1]).src = "";
+                document.getElementById(ClickImg[0]).removeAttribute("onclick");
+                document.getElementById(ClickImg[1]).removeAttribute("onclick");
+                cardCheck++;   // 카드 삭제 회수 증가
+                // 선택한 두개의 카드 이미지 삭제
+            }
+            else {
+                // 선택한 두개의 카드 이미지가 다른 경우
+
+                for(var i = 0; i < ClickImg.length; i++){
+                    document.getElementById(ClickImg[i]).src = "background.gif";
+                }
+                // 변경된 이미지를 다시 원래 이미지로 변경
+            }
+
+            choice = 0; // 선택 횟수 초기화
+        }
+        else {
+            // 카드 2번 이하 클릭 시
+
+            var imgElement = document.getElementById(ElementId);        // 선택한 카드
+            ClickImg[choice] = imgElement.id;                          // 선택한 카드의 아이디를 배열에 저장
+            imgElement.src = "CardImg_" + imgElement.value + ".gif";  // 선택한 카드의 값에 따라 이미지 변경
+            choice++;                                                   // 선택 횟수 증가
+        }
+    }
+
+    var userCount = 0;                // 사용자 수
+    var AllRank = Array();            // 전체 사용자의 정보가 들어갈 배열
+    var rankingRecord1 = Array();    // 레벨 1의 사용자들을 순위순으로 저장
+    var rankingRecord2 = Array();    // 레벨 2의 사용자들을 순위순으로 저장
+    var rankingRecord3 = Array();    // 레벨 3의 사용자들을 순위순으로 저장
+
+    function ranking(time, user, gameLevel) {
+        // 게임 종료 후 사용자가 아이디를 입력 시 실행
+
+        rankingRecord1.splice(0, rankingRecord1.length);
+        rankingRecord2.splice(0, rankingRecord2.length);
+        rankingRecord3.splice(0, rankingRecord3.length);
+        // 모든 정보 제거
+
+        while (document.getElementById("Level1").hasChildNodes()) {
+            document.getElementById("Level1").removeChild(document.getElementById("Level1").firstChild);
+        }
+        // 레벨 1의 기록이 남아있으면 모두 삭제
+
+        while (document.getElementById("Level2").hasChildNodes()) {
+            document.getElementById("Level2").removeChild(document.getElementById("Level2").firstChild);
+        }
+        // 레벨 2의 기록이 남아있으면 모두 삭제
+
+        while (document.getElementById("Level3").hasChildNodes()) {
+            document.getElementById("Level3").removeChild(document.getElementById("Level3").firstChild);
+        }
+        // 레벨 3의 기록이 남아있으면 모두 삭제
+
+        var rankArr = Array();           // 현 사용자의 정보(시간, 아이디, 레벨)가 들어갈 배열
+
+        rankArr[0] = time;               // 사용자의 기록 저장
+        rankArr[1] = user;               // 사용자의 아이디 저장
+        rankArr[2] = gameLevel;          // 사용자가 선택한 게임 레벨 저장
+
+        AllRank[userCount] = rankArr;  // 모든 사용자의 정보를 배열에 저장
+        userCount++;                    // 사용자 수 증가
+
+        var level1List = Array();        // 레벨 1을 선택한 사용자만 저장할 배열
+        var level2List = Array();        // 레벨 2를 선택한 사용자만 저장할 배열
+        var level3List = Array();        // 레벨 3을 선택한 사용자만 저장할 배열
+
+        var levelOne = 0;                // 레벨 1을 선택한 사용자 수
+        var levelTwo = 0;                // 레벨 2를 선택한 사용자 수
+        var levelThree = 0;              // 레벨 3을 선택한 사용자 수
+
+        for (var i = 0; i < userCount; i++) {
+            if (AllRank[i][2] == 1) {
+                level1List[levelOne] = AllRank[i];
+                levelOne++;
+            }
+            else if (AllRank[i][2] == 2) {
+                level2List[levelTwo] = AllRank[i];
+                levelTwo++;
+            }
+            else {
+                level3List[levelThree] = AllRank[i];
+                levelThree++;
+            }
+        }
+        // 사용자가 선택한 레벨별로 사용자 구분
+
+        var TimeCount = 1;        // 기록 시간
+        var RankCount = 1;        // 랭킹
+        var haveOrNo = false;    // 기록을 가진 사용자의 유무판별을 위한 변수
+        var recordTen_1 = 0;      // 레벨 1 기록 횟수
+        var recordTen_2 = 0;      // 레벨 2 기록 횟수
+        var recordTen_3 = 0;      // 레벨 3 기록 횟수
+
+        // 레벨 1인 경우
+        for (var k = 1; k <= 10; k++) {
+            TimeCount = k;    // 기록 저장
+
+            for (var i = 0; i < level1List.length; i++) {
+                if (TimeCount == level1List[i][0]) {
+                    level1List[i][3] = RankCount;          // 해당 사용자의 정보에 순위 저장
+                    rankingRecord1.push(level1List[i]);    // 해당 기록을 가진 사용자 저장
+                    haveOrNo = true;                       // 해당 기록을 가진 사용자의 유무 판별
+                }
+            }
+
+            if (haveOrNo) {
+                RankCount++
+            }
+            // 해당 기록을 가진 사용자의 유무 판별에 따른 랭킹 증가
+
+            haveOrNo = false;   // 판별값 초기화
+        }
+
+        for (var i = 0; i < rankingRecord1.length; i++) {
+            var liRank = document.createElement("li");
+            document.getElementById("Level1").appendChild(liRank);
+            // 레벨 1항목 밑에 목록 생성
+
+            recordTen_1++   // 기록 횟수 증수
+
+            if(user == rankingRecord1[i][1]) {
+                liRank.innerHTML = rankingRecord1[i][3] + "위 - " + rankingRecord1[i][1] + "  - 걸린 시간: " + rankingRecord1[i][0] + "초";
+                liRank.className = "fontColor";
+                // 사용자 자신의 아이디일 경우 빨간색으로 표시
+            }
+            else {
+                liRank.innerHTML = rankingRecord1[i][3] + "위 - " + rankingRecord1[i][1] + "  - 걸린 시간: " + rankingRecord1[i][0] + "초";
+            }
+            // 기록 목록에 사용자의 기록 추가
+
+            if (recordTen_1 == 10) {
+                recordTen_1 = 0;      // 기록 횟수 초기화
+                break;
+            }
+            // 1 ~ 10위까지만 출력
+        }
+
+        RankCount = 1;       // 랭킹
+        haveOrNo = false;    // 기록을 가진 사용자의 유무판별을 위한 변수
+
+        // 레벨 2인 경우
+        for (var k = 1; k <= 60; k++) {
+            TimeCount = k;    // 기록 저장
+
+            for (var i = 0; i < level2List.length; i++) {
+                if (TimeCount == level2List[i][0]) {
+                    level2List[i][3] = RankCount;          // 해당 사용자의 정보에 순위 저장
+                    rankingRecord2.push(level2List[i]);    // 해당 기록을 가진 사용자 저장
+                    haveOrNo = true;                       // 해당 기록을 가진 사용자의 유무 판별
+                }
+            }
+
+            if (haveOrNo) {
+                RankCount++
+            }
+            // 해당 기록을 가진 사용자의 유무 판별에 따른 랭킹 증가
+
+            haveOrNo = false;   // 판별값 초기화
+        }
+
+        for (var i = 0; i < rankingRecord2.length; i++) {
+            var liRank = document.createElement("li");
+            document.getElementById("Level2").appendChild(liRank);
+            // 레벨 1항목 밑에 목록 생성
+
+            recordTen_2++   // 기록 횟수 증수
+
+            if(user == rankingRecord2[i][1]) {
+                liRank.innerHTML = rankingRecord2[i][3] + "위 - " + rankingRecord2[i][1] + "  - 걸린 시간: " + rankingRecord2[i][0] + "초";
+                liRank.className = "fontColor";
+                // 사용자 자신의 아이디일 경우 빨간색으로 표시
+            }
+            else {
+                liRank.innerHTML = rankingRecord2[i][3] + "위 - " + rankingRecord2[i][1] + "  - 걸린 시간: " + rankingRecord2[i][0] + "초";
+            }
+            // 기록 목록에 사용자의 기록 추가
+
+            if (recordTen_2 == 10) {
+                recordTen_2 = 0;      // 기록 횟수 초기화
+                break;
+            }
+            // 1 ~ 10위까지만 출력
+        }
+
+        RankCount = 1;          // 랭킹
+        haveOrNo = false;      // 기록을 가진 사용자의 유무판별을 위한 변수
+
+
+        // 레벨 3인 경우
+        for (var k = 1; k <= 120; k++) {
+            TimeCount = k;    // 기록 저장
+
+            for (var i = 0; i < level3List.length; i++) {
+                if (TimeCount == level3List[i][0]) {
+                    level3List[i][3] = RankCount;          // 해당 사용자의 정보에 순위 저장
+                    rankingRecord3.push(level3List[i]);    // 해당 기록을 가진 사용자 저장
+                    haveOrNo = true;                       // 해당 기록을 가진 사용자의 유무 판별
+                }
+            }
+
+            if (haveOrNo) {
+                RankCount++
+            }
+            // 해당 기록을 가진 사용자의 유무 판별에 따른 랭킹 증가
+
+            haveOrNo = false;   // 판별값 초기화
+        }
+
+        for (var i = 0; i < rankingRecord3.length; i++) {
+            var liRank = document.createElement("li");
+            document.getElementById("Level3").appendChild(liRank);
+            // 레벨 1항목 밑에 목록 생성
+
+            recordTen_3++   // 기록 횟수 증수
+
+            if(user == rankingRecord3[i][1]) {
+                liRank.innerHTML = rankingRecord3[i][3] + "위 - " + rankingRecord3[i][1] + "  - 걸린 시간: " + rankingRecord3[i][0] + "초";
+                liRank.className = "fontColor";
+                // 사용자 자신의 아이디일 경우 빨간색으로 표시
+            }
+            else {
+                liRank.innerHTML = rankingRecord3[i][3] + "위 - " + rankingRecord3[i][1] + "  - 걸린 시간: " + rankingRecord3[i][0] + "초";
+            }
+            // 기록 목록에 사용자의 기록 추가
+
+            if (recordTen_3 == 10) {
+                recordTen_3 = 0;      // 기록 횟수 초기화
+                break;
+            }
+            // 1 ~ 10위까지만 출력
+        }
+    }
+
+    function removeRecord() {
+        var recordLevel1 = document.getElementById("Level1");     // 레벨 1 기록 목록
+        var recordLevel2 = document.getElementById("Level2");     // 레벨 2 기록 목록
+        var recordLevel3 = document.getElementById("Level3");     // 레벨 3 기록 목록
+
+        while (recordLevel1.hasChildNodes()) {
+            recordLevel1.removeChild(recordLevel1.firstChild);
+        }
+        // 레벨 1 기록 모두 제거
+
+        while (recordLevel2.hasChildNodes()) {
+            recordLevel2.removeChild(recordLevel2.firstChild);
+        }
+        // 레벨 2 기록 모두 제거
+
+        while (recordLevel3.hasChildNodes()) {
+            recordLevel3.removeChild(recordLevel3.firstChild);
+        }
+        // 레벨 3 기록 모두 제거
+
+        AllRank.splice(0, AllRank.length);
+        rankingRecord1.splice(0, rankingRecord1.length);
+        rankingRecord2.splice(0, rankingRecord2.length);
+        rankingRecord3.splice(0, rankingRecord3.length);
+        // 모든 기록 제거
+    }
+
+    function findRecord() {
+        var find_id = prompt("찾고 싶은 아이디를 입력하시오");    // 사용자로부터 찾고싶은 아이디 입력받음
+        var find_level = prompt("찾고 싶은 레벨을 입력하시오");   // 사용자로부터 찾고싶은 레벨 입력받음
+        var finded1 = Array();                                      // 찾은 아이디 저장 배열
+        var finded2 = Array();                                      // 찾은 아이디 저장 배열
+        var finded3 = Array();                                      // 찾은 아이디 저장 배열
+        var Allfind = "";                                           // 출력 변수
+
+        for (var i = 0; i < rankingRecord1.length; i++) {
+            if (rankingRecord1[i][1] == find_id) {
+                finded1.push(i);
+            }
+        }
+
+        for (var i = 0; i < rankingRecord2.length; i++) {
+            if (rankingRecord2[i][1] == find_id) {
+                finded2.push(i);
+            }
+        }
+
+        for (var i = 0; i < rankingRecord3.length; i++) {
+            if (rankingRecord3[i][1] == find_id) {
+                finded3.push(i);
+            }
+        }
+        // 레벨별로 기록에서 사용자가 찾고싶은 아이디가 있으면 모두 저장
+
+        if (find_level == 1) {
+            // 사용자가 찾고 싶은 아이디가 레벨 1에 있을 때
+
+            for (var i = 0; i < finded1.length; i++) {
+                Allfind += "순위: " + rankingRecord1[finded1[i]][3] + " id: " + rankingRecord1[finded1[i]][1] + "  레벨: " + rankingRecord1[finded1[i]][2] + "  기록: " + rankingRecord1[finded1[i]][0] + "초 입니다.\n";
+            }
+            // 찾은 모든 아이디의 정보를 하나의 변수의 저장
+
+            alert(Allfind);    // 찾은 모든 아이디의 정보를 출력
+        }
+
+        if (find_level == 2) {
+            // 사용자가 찾고 싶은 아이디가 레벨 2에 있을 때
+
+            for (var i = 0; i < finded2.length; i++) {
+                Allfind += "순위: " + rankingRecord2[finded2[i]][3] + " id: " + rankingRecord2[finded2[i]][1] + "  레벨: " + rankingRecord2[finded2[i]][2] + "  기록: " + rankingRecord2[finded2[i]][0] + "초 입니다.\n";
+            }
+            // 찾은 모든 아이디의 정보를 하나의 변수의 저장
+
+            alert(Allfind);    // 찾은 모든 아이디의 정보를 출력
+        }
+
+        if (find_level == 3) {
+            // 사용자가 찾고 싶은 아이디가 레벨 3에 있을 때
+
+            for (var i = 0; i < finded3.length; i++) {
+                Allfind += "순위: " + rankingRecord3[finded3[i]][3] + " id: " + rankingRecord3[finded3[i]][1] + "  레벨: " + rankingRecord3[finded3[i]][2] + "  기록: " + rankingRecord3[finded3[i]][0] + "초 입니다.\n";
+            }
+            // 찾은 모든 아이디의 정보를 하나의 변수의 저장
+
+            alert(Allfind);    // 찾은 모든 아이디의 정보를 출력
+        }
+    }
+
+    function gameExplain() {
+        alert("1. 게임시작 버튼을 클릭한다.\n2. 카드 2장을 선택한다.\n3. 카드의 이미지와 순서를 기억한다.\n" +
+            "4. 카드의 이미지가 같은 카드 2장을 선택한다.\n5. 시간 안에 모든 카드를 제거한다.\n" +
+            "5. 모든 카드를 제거하면 성공, 카드가 남아있다면 실패\n6. 성공 시 자신의 아이디를 남겨 기록에 저장");
+        // 게임 설명
+    }
+</script>
+
+<!-- 타이틀 -->
+<div class="title_div" style="width: 660px;">
+    카드 그림 맞추기 2wdj 1201224 이세혁
+</div>
+<!-- 타이틀 -->
+
+<!-- 게임시작 버튼 -->
+<div id="timerAndStart" style="float: left">
+    <input type="button" value="게임시작" onclick="gameStart()" class="start_button">
+</div>
+<!-- 게임시작 버튼 -->
+
+<!-- 시간 표시 막대 -->
+<div style="float: left; position: absolute; left: 70px">
+    <table>
+        <tr id="timePole">
+
+        </tr>
+    </table>
+</div>
+<!-- 시간 표시 막대 -->
+
+<br><br><br>
+
+<!-- 이미지가 들어갈 부분 -->
+<div id="inputImg" class="body_div">
+
+</div>
+<!-- 이미지가 들어갈 부분 -->
+
+
+<div style="position: absolute; left: 700px; top: 9px;">
+    <!-- 기록 타이틀 -->
+    <div class="title_div"  style="width: 286px;">
+        게&nbsp;임&nbsp;기&nbsp;록
+    </div>
+    <!-- 기록 타이틀 -->
+
+    <div>
+        <!-- 기록 초기화 버튼 -->
+        <input type="button" value="기록 초기화" style="position: relative; width: 90px; height: 50px" onclick="removeRecord()">
+        <!-- 기록 초기화 버튼 -->
+
+        <!-- 기록 찾기 버튼 -->
+        <input type="button" value="기록 찾기" style="position: relative; width: 90px; height: 50px" onclick="findRecord()">
+        <!-- 기록 초기화 버튼 -->
+
+        <!-- 게임 방법 설명 버튼 -->
+        <input type="button" value="게임 방법" style="position: relative; width: 90px; height: 50px" onclick="gameExplain()">
+        <!-- 게임 방법 설명 버튼 -->
+    </div>
+
+    <br>
+
+    <!-- 기록이 들어갈 부분 -->
+    <div class="record">
+        레벨 1
+    </div>
+
+    <ul id="Level1">
+
+    </ul>
+
+    <div class="record">
+        레벨 2
+    </div>
+
+    <ul id="Level2">
+
+    </ul>
+
+    <div class="record">
+        레벨 3
+    </div>
+
+    <ul id="Level3">
+
+    </ul>
+    <!-- 기록이 들어갈 부분 -->
+</div>
+</body>
+</html>

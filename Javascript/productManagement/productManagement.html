@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script language="JavaScript">
+
+        // 입력되는 제품의 정보를 저장할 클래스 정의
+        function product(uniqNum, name, productP, productCount, price) {
+            this.seq           = uniqNum;       // 순번
+            this.productName  = name;          // 제품명
+            this.productPrice = productP;      // 제품단가
+            this.numOfProduct = productCount;  // 수량
+            this.totalPrice   = price;         // 금액
+        }
+
+        // 물품정보를 저장할 배열
+        var productList = Array();
+
+        // 정렬 함수
+        function sortData(arg) {
+
+            // 테이블 삭제
+            removeAllTrsFromTable();
+
+            if(arg == 'seqAsc'){
+                // 목록출력
+                productList.sort(function (a, b) {
+                    if(Number(a.seq) > Number(b.seq)){
+                        return 1;
+                    }
+                    if(Number(a.seq) < Number(b.seq)){
+                        return -1;
+                    }
+                    return 0;
+                })
+                // 순번기준으로 오름차순으로 정렬
+
+                for(let i in productList){
+                    addDataToHtmlTable(productList[i].seq, productList[i].productName, productList[i].productPrice, productList[i].numOfProduct, productList[i].totalPrice);
+                }
+                // 데이터 출력
+
+            }
+            else if(arg == 'pNumAsc'){
+                // 수량-오름차순
+                productList.sort(function (a, b) {
+                    if(Number(a.numOfProduct) > Number(b.numOfProduct)){
+                        return 1;
+                    }
+                    if(Number(a.numOfProduct) < Number(b.numOfProduct)){
+                        return -1;
+                    }
+                    return 0;
+                })
+                // 수량을 기준으로 오름차순으로 정렬
+
+                for(let i in productList){
+                    addDataToHtmlTable(productList[i].seq, productList[i].productName, productList[i].productPrice, productList[i].numOfProduct, productList[i].totalPrice);
+                }
+                // 데이터 출력
+            }
+            else if(arg == 'pPriceDsc'){
+                // 단가-내림차순
+                productList.sort(function (a, b) {
+                    if(Number(a.productPrice) > Number(b.productPrice)){
+                        return -1;
+                    }
+                    if(Number(a.productPrice) < Number(b.productPrice)){
+                        return 1;
+                    }
+                    return 0;
+                })
+                // 단가기준으로 내림차순으로 정렬
+
+                for(let i in productList){
+                    addDataToHtmlTable(productList[i].seq, productList[i].productName, productList[i].productPrice, productList[i].numOfProduct, productList[i].totalPrice);
+                }
+                // 데이터 출력
+            }
+            else
+                return 0;
+        }
+
+        // 입력 버튼 클릭시
+        function insertData() {
+            var productNameObj     = document.getElementById("productName");
+            var productPriceObj    = document.getElementById("productPrice");
+            var numOfProductObj    = document.getElementById("numOfProduct");
+            var total              = productPriceObj.value * numOfProductObj.value;  // 금액
+            var find               = false;                                           // 같은 이름의 데이터가 있는지 확인
+
+            if(productList.length == 0){
+                productList[0] = new product(1, productNameObj.value, productPriceObj.value, numOfProductObj.value, total);
+            }
+            // 처음에는 아무것도 없으므로 바로 추가
+            else{
+                for(let i in productList){
+                    if(productList[i].productName === productNameObj.value){
+                        productList[i].numOfProduct = numOfProductObj.value;
+                        productList[i].totalPrice = total;
+                        find = true;
+                        break;
+                    }
+                }
+                // 입력 될 제품이 이미 등록되어 있는 경우, 수량과 금액만 업데이트
+
+                if(find == false){
+                    productList[productList.length] = new product(productList.length+1, productNameObj.value, productPriceObj.value,
+                                                                         numOfProductObj.value, total);
+                }
+                // 입력 될 제품이 없을 경우, 추가로 등록
+            }
+
+            removeAllTrsFromTable();
+            // 테이블 삭제
+
+            for(let i in productList){
+                addDataToHtmlTable(productList[i].seq, productList[i].productName, productList[i].productPrice, productList[i].numOfProduct, productList[i].totalPrice);
+        }}
+        // 데이터 출력
+
+        // <<-- HTML 입력, 삭제 함수
+        // "입력 버튼 클릭 시 동작"
+
+        // HTML 재고 테이블에 데이터 삽입
+        // seq : 순번, pName: 제품이름, pPrice: 제품가격, numOfP: 제품수량, totalPrice: 제품가격
+        function addDataToHtmlTable(seq, pName, pPrice, numOfP, totalPrice) {
+            var createdTr = document.createElement("TR");
+            var createdTd = document.createElement("TD");
+
+            createdTd.appendChild(document.createTextNode(seq));
+            createdTr.appendChild(createdTd);
+
+            createdTd = document.createElement("TD");
+            createdTd.appendChild(document.createTextNode(pName));
+            createdTd.ondblclick = function () {
+                // 더블 클릭시 함수 호출
+                var inputValue = prompt("값을 입력하시오.");     // 새로운 데이터 이름값을 입력 받음
+                productList[seq - 1].productName = inputValue;  // 이름값을 수정
+
+                removeAllTrsFromTable();
+                // 테이블 삭제
+
+                for(let i in productList){
+                    addDataToHtmlTable(productList[i].seq, productList[i].productName, productList[i].productPrice,
+                                       productList[i].numOfProduct, productList[i].totalPrice);
+                }
+                // 데이터 출력
+            }
+            createdTr.appendChild(createdTd);
+
+
+            createdTd = document.createElement("TD");
+            createdTd.appendChild(document.createTextNode(pPrice));
+            createdTd.ondblclick = function () {
+                // 더블 클릭시 함수 호출
+                var inputValue = prompt("값을 입력하시오.");      // 새로운 단가값을 입력 받음
+                productList[seq - 1].productPrice = inputValue;  // 단가값을 수정
+                productList[seq - 1].totalPrice = Number(inputValue) * Number(productList[seq - 1].numOfProduct);
+                // 바뀌 단가로 인해 금액도 수정
+
+                removeAllTrsFromTable();
+                // 테이블 삭제
+
+                for(let i in productList){
+                    addDataToHtmlTable(productList[i].seq, productList[i].productName, productList[i].productPrice,
+                                       productList[i].numOfProduct, productList[i].totalPrice);
+                }
+                // 데이터 출력
+            }
+            createdTr.appendChild(createdTd);
+
+            createdTd = document.createElement("TD");
+            createdTd.appendChild(document.createTextNode(numOfP));
+            createdTd.ondblclick = function () {
+                // 더블 클릭시 함수 호출
+                var inputValue = prompt("값을 입력하시오.");      // 새로운 수량값을 입력 받음
+                productList[seq - 1].numOfProduct = inputValue;  // 수량값을 수정
+                productList[seq - 1].totalPrice = Number(inputValue) * Number(productList[seq - 1].productPrice);
+                // 바뀌 수량으로 인해 금액도 수정
+
+                removeAllTrsFromTable();
+                // 테이블 삭제
+
+                for(let i in productList){
+                    addDataToHtmlTable(productList[i].seq, productList[i].productName, productList[i].productPrice,
+                                       productList[i].numOfProduct, productList[i].totalPrice);
+                }
+                // 데이터 삭제
+            }
+            createdTr.appendChild(createdTd);
+
+            createdTd = document.createElement("TD");
+            createdTd.appendChild(document.createTextNode(totalPrice));
+            createdTr.appendChild(createdTd);
+
+            var tableObj = document.getElementById("stockTableBody");
+            tableObj.appendChild(createdTr);
+        }
+
+        // 현재 재고 테이블의 모든 목록을 삭제
+        function removeAllTrsFromTable() {
+            var tableBodyObj = document.getElementById("stockTableBody");
+
+            while(tableBodyObj.children.length > 0) {
+                tableBodyObj.removeChild(tableBodyObj.firstChild);
+            }
+        }
+        // HTML 입력, 삭제 함수 -->>
+    </script>
+
+</head>
+<body>
+
+<table width="800" cellpadding="0">
+    <tr>
+        <td>제품명 <input id=productName type="text" size="5"></td>
+        <td>단가   <input id=productPrice type="text" size="5"></td>
+        <td>수량   <input id=numOfProduct type="text" size="5"></td>
+        <td><input type="button" value="입력" onclick="insertData()"></td>
+        <td><input type="button" value="목록 출력" onclick="sortData('seqAsc')"></td>
+        <td><input type="button" value="수량-오름차순" onclick="sortData('pNumAsc')"></td>
+        <td><input type="button" value="단가-내림차순" onclick="sortData('pPriceDsc')"></td>
+    </tr>
+</table>
+<table id="stockTable" width="800" cellpadding="0" border="1">
+    <thead>
+    <tr align="center">
+        <!-- 순번 -->
+        <td>순번</td>
+        <!-- 제품명 -->
+        <td>제품명</td>
+        <!-- 단가 -->
+        <td>단가</td>
+        <!-- 수량 -->
+        <td>수량</td>
+        <!-- 금액 -->
+        <td>금액</td>
+    </tr>
+    </thead>
+    <tbody id="stockTableBody">
+    </tbody>
+</table>
+</body>
+</html>
