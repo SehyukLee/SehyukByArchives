@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        function checkSubject() {
+            var subject = document.getElementById("subject").value;
+
+            if (subject.length == 0) {
+                document.getElementById("form").removeAttribute("action");
+            }
+            else {
+                document.getElementById("form").setAttribute("action", "updateData.php");
+            }
+        }
+    </script>
+</head>
+<body>
+<form method="post" id="form">
+제목 <input type="text" size="62px" id="subject" name="notNull">
+<br>
+내용
+<br>
+<textarea name="content" style="width: 500px; height: 500px;">
+
+</textarea>
+<br>
+<input type="submit" value="확인" onclick="checkSubject()">
+</form>
+<form action="list.php">
+    <input type="submit" value="취소">
+</form>
+</body>
+</html>

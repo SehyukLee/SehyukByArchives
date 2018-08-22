@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+
+        function SenderReseiver() {
+            httpRequest = new XMLHttpRequest();
+            // 서버에 데이터의 송수신을 위해 사용
+
+            httpRequest.open('GET', 'http://localhost/calculator.php?op1='
+                                      + document.getElementById('op1').value
+                                      + '&op2=' + document.getElementById('op2').value, true);
+            // 보내줄 데이터의 전송방식과 어디로 보낼지 결정
+
+            httpRequest.send();
+            // 데이터 전송
+
+            httpRequest.onreadystatechange = function () {
+                if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                    document.getElementById('answer').value = httpRequest.responseText;  // 전송 받은 데이터 결과 text에 저장
+                } else if (httpRequest.readyState < 4) {
+                    clearInterval(second);
+                    document.getElementById('count').innerHTML = "";
+                    // '.' 추가를 멈추고 loading을 제거
+                }
+            }
+            // 현재 데이터의 수신 상태(readyState,status)에 따라 작동
+            // readyState == 0  ----> 객체만 생성 (open 메서드 호출되지 않음)
+            //            == 1  ----> open 메서드 호출
+            //            == 2  ----> send 메서드 호출, status의 헤더가 도착하지 않은 상태
+            //            == 3  ----> 데이터의 일부를 받은 상태
+            //            == 4  ----> 데이터 전부를 받은 상태
+
+            // status == 200  ----> 요청 성공
+            //        == 403  ----> 접근 거부
+            //        == 404  ----> 페이지 없음
+            //        == 500  ----> 서버 오류 발생생
+
+           document.getElementById('count').innerHTML = "loading";
+            var second = setInterval(function () {
+                document.getElementById('count').innerHTML += ".";
+                if(document.getElementById('count').innerHTML == "loading..........") {
+                    document.getElementById('count').innerHTML = "loading";
+                }
+            }, 100)
+            // 정답버튼을 누르면 값이 나올 때 까지 0.1초마다 '.'을 추가
+            // 특정 문자가 되면 다시 초기화
+        }
+
+    </script>
+</head>
+<body>
+<input type="text" id="op1">+
+<input type="text" id="op2">=
+<input type="text" id="answer">
+<input type="button" onclick="SenderReseiver()" value="정답">
+<div id="count"></div>
+</body>
+</html>
