@@ -9,6 +9,7 @@
             border-color: black;
             text-align: center;
         }
+        // 테이블 스타일
     </style>
 </head>
 <body>
@@ -23,6 +24,7 @@
                     <input type="submit" value="검색">
                 </form>
             </td>
+            <!-- 검색태그 -->
             <?php
                 if (isset($_SESSION['name'])) {
                     echo "<td>";
@@ -41,11 +43,13 @@
                     echo "</form>";
                     echo "</td>";
                 }
+                // 로그인 유무에 따라
             ?>
         </tr>
     </table>
 </div>
 <br>
+<!-- 게시판 테이블 -->
 <table class="tableStyle" style="height: 300px; width: 700px" align="center">
     <tr>
         <td class="tableStyle">글번호</td>
@@ -63,6 +67,7 @@
 
             $page = 1;
         }
+        // 검색 결과 없을 경우
 
         if ($page == "noid") {
             echo "<script>";
@@ -71,14 +76,17 @@
 
             $page = 1;
         }
+        // 잘못 입력 했을 경우
 
-        $pageCount = ($page - 1) * 5;
+        $pageCount = ($page - 1) * 5;   // 페이지 계산
 
         @$db_con = mysql_connect("localhost", "root", "autoset");
         mysql_select_db("sehyuk_board");
+        // DB 연결
 
         $board = mysql_query("select board_id, subject, reg_date, hits from board where board_pid = 0 order by board_id desc limit $pageCount, 5");
-
+        // 페이지에 맞는 데이터 가져오기
+    
         for ($i = 0; $i < mysql_num_rows($board); $i++) {
             $board_result = mysql_fetch_row($board);
             echo "<tr>";
@@ -100,8 +108,11 @@
 
             echo "</tr>";
         }
+        // 내용 출력
+    
         echo "</table>";
 
+        // 페이지네이션 기능
         echo "<br><div align='center'>";
 
         $id_count = mysql_query("select count(board_id) from board where board_pid = 0");
@@ -157,6 +168,7 @@
         }
 
         echo "</div>";
+        // 페이지네이션 기능
 
         if (isset($_SESSION['name'])) {
             echo "<br>";
@@ -166,8 +178,9 @@
             echo "</form>";
             echo "</div>";
         }
+        // 로그인 했을 경우 다른 기능 사용 가능
 
-        mysql_close();
+        mysql_close();  // DB연결 종료
     ?>
 </body>
 </html>
