@@ -1,14 +1,14 @@
 <?php
-    $insertDataTitle    = isset($_POST['writerTitle']) ? $_POST['writerTitle'] : false;
-    $insertDataContent  = isset($_POST['writerContent']) ? $_POST['writerContent'] : false;
+    $insertDataTitle    = isset($_POST['writerTitle']) ? $_POST['writerTitle'] : false;         // 게시글 제목
+    $insertDataContent  = isset($_POST['writerContent']) ? $_POST['writerContent'] : false;     // 게시글 내용
 
     try {
         if ($insertDataTitle == false) {
             throw new Exception();
         }
         else {
-            $connectedDB = new myDBMS();
-            $connectedDB->insertData($insertDataTitle, $insertDataContent);
+            $connectedDB = new myDBMS();                                        // DB연결 객체 생성
+            $connectedDB->insertData($insertDataTitle, $insertDataContent);     // insertData에 값 전달
         }
     } catch (Exception $e) {
         include 'writerCreate.html';
@@ -21,6 +21,7 @@
         const user_pass  = 'autoset';
         const use_db     = 'sehyuk_board';
     }
+    // DB 연결에 사용할 값 정리
 
     class myDBMS {
         function insertData ($subject, $contents) {
@@ -39,6 +40,7 @@
                         </script>";
                 echo "<input type='button' value='뒤로가기' onclick='backWriter()'>";
             }
+            // DB연결
 
             try {
                 $sendQuery = $db_con->query("insert into board values ('', 0, 'lsh', '이세혁', '$subject', '$contents', 0, 0);");
@@ -64,6 +66,7 @@
                         </script>";
                 echo "<input type='button' value='뒤로가기' onclick='backWriter()'>";
             }
+            // 게시글 저장
         }
     }
 ?>
