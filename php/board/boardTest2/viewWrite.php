@@ -15,6 +15,7 @@
             document.getElementById("form_id").setAttribute("action", "write.php");
         }
     }
+    // 제목 유무 체크
 </script>
 <body>
 <form method="post" id="form_id">
@@ -31,5 +32,6 @@
 <form action="board_list.php">
     <input type="submit" value="취소">
 </form>
+<!-- 글 입력 태그 -->
 </body>
 </html>
