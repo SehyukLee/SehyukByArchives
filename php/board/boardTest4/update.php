@@ -1,15 +1,19 @@
 <?php
-    $updateDataTitle    = isset($_POST['writerTitle']) ? $_POST['writerTitle'] : false;
-    $updateDataContent  = isset($_POST['writerContent']) ? $_POST['writerContent'] : false;
-    $board_id = isset($_GET['board_id']) ? $_GET['board_id'] : false;
+    $updateDataTitle    = isset($_POST['writerTitle']) ? $_POST['writerTitle'] : false;         // 수정할 게시글 제목
+    $updateDataContent  = isset($_POST['writerContent']) ? $_POST['writerContent'] : false;     // 수정할 게시글 내용
+    $board_id = isset($_GET['board_id']) ? $_GET['board_id'] : false;                           // 수정할 게시글 아이디
 
     try {
         if ($updateDataTitle == false) {
+            // 제목이 없을 경우
+            
             throw new Exception();
         }
         else {
-            $connectedDB = new myDBMS();
-            $connectedDB->insertData($updateDataTitle, $updateDataContent, $board_id);
+            // 제목이 있을 경우
+            
+            $connectedDB = new myDBMS();                                                // DB연결 객체 생성
+            $connectedDB->updateData($updateDataTitle, $updateDataContent, $board_id);  // 게시글 수정
         }
     } catch (Exception $e) {
         include "viewWrite.php?board_id=$board_id";
@@ -22,9 +26,10 @@
         const user_pass  = 'autoset';
         const use_db     = 'sehyuk_board';
     }
+    // DB연결에 사용할 값 정리
 
     class myDBMS {
-        function insertData ($subject, $contents, $updateViewBoard_id) {
+        function updateData ($subject, $contents, $updateViewBoard_id) {
             try {
                 $db_con = new mysqli(constantValue::IP_adress, constantValue::user_name, constantValue::user_pass, constantValue::use_db);
 
@@ -40,6 +45,7 @@
                         </script>";
                 echo "<input type='button' value='뒤로가기' onclick='backWriter()'>";
             }
+            // DB연결
 
             try {
                 $sendQuery = $db_con->query("update board set subject='$subject', contents='$contents' where board_id=$updateViewBoard_id;");
@@ -65,6 +71,7 @@
                         </script>";
                 echo "<input type='button' value='뒤로가기' onclick='backWriter()'>";
             }
+            // 게시글 
         }
     }
 ?>
