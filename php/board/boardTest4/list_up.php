@@ -5,14 +5,16 @@
         const user_pass  = 'autoset';
         const use_db     = 'sehyuk_board';
     }
+    // DB연결에 사용할 값 정리
 
-    $list = new myDBMS();
-    $list->selectList();
+    $list = new myDBMS();   // DB연결 객체 생성
+    $list->selectList();    // 리스트 호출
 
     class myDBMS {
         function selectList () {
             $db_con = new mysqli(constantValue::IP_adress, constantValue::user_name, constantValue::user_pass, constantValue::use_db);
-
+            // DB연결
+            
             try {
                 if ($db_con->errno != 0) {
                     throw new Exception();
@@ -28,7 +30,9 @@
             }
 
             $select = $db_con->query("select board_id, user_id, subject, reg_date from board;");
-
+            // 리스트 검색
+            
+            // 리스트 출력
             echo "<!DOCTYPE html>
                     <html lang=\"en\">
                     <head>
@@ -80,6 +84,7 @@
                         </div>
                     </body>
                     </html>";
+             // 리스트 출력
         }
     }
 ?>
