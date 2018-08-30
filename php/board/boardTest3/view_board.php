@@ -75,10 +75,12 @@
         echo "<input type='submit' value='댓글달기' onclick='underText()'>";
 
         $viewUnder = mysql_query("select user_id, contents, reg_date, board_id from ycj_first_board where board_pid = $view_id");
-        $row =mysql_num_rows($viewUnder);
-        $field = mysql_num_fields($viewUnder);
-        // 해당 글에 쓴 모든 댓글
-
+        // 해당 글에 쓴 모든 댓글 검색
+        
+        $row =mysql_num_rows($viewUnder);       // 열의 개수
+        $field = mysql_num_fields($viewUnder);  // 행의 개수
+        
+        // 모든 댓글 출력
         echo "<table id='under' width='600px'>";
         for ($i = 0; $i < $row; $i++) {
             $viewUnderArr = mysql_fetch_row($viewUnder);
@@ -141,6 +143,8 @@
         }
 
         echo "</table>";
+        // 모든 댓글 출력
+        
         echo "</div>";
     }
 
@@ -207,10 +211,12 @@
             }
         }
     }
+    // 댓글 저장 및 출력
 
     function deleteUnder(board_id) {
         location.href = "delete.php?id=" + board_id;
     }
+    // 댓글 삭제
 
     function updateUnder(under_id) {
         var textUnder = document.createElement("input");
@@ -228,6 +234,7 @@
         td.appendChild(textUnder);
         td.appendChild(store);
     }
+    // 댓글 수정 버튼 클릭 시 태그 텍스트화
 
     function underDataAjax(id_data) {
         var content = document.getElementById("text" + id_data).value;
@@ -261,4 +268,5 @@
             }
         }
     }
+    // 댓글 수정 및 출력
 </script>
