@@ -9,6 +9,7 @@
         border: 1px solid black;
         border-collapse: collapse;
     }
+    // 테이블 스타일
 </style>
 <body>
 <h1 align="center">
@@ -22,19 +23,24 @@
         <td class="table">작성 시간</td>
     </tr>
     <?php
-    $inputPage = isset($_GET['page']) ? $_GET['page'] : 1;
-    $page = ($inputPage - 1) * 5;
+    $inputPage = isset($_GET['page']) ? $_GET['page'] : 1;      // 페이지 번호
+    $page = ($inputPage - 1) * 5;                               // 페이지 계산
 
     @$db_con = mysql_connect("localhost", "root", "autoset");
     mysql_select_db("ycj_test");
+    // DB연결
 
     $result = mysql_query("select board_id, subject, hits, reg_date from ycj_first_board where board_pid = 0 order by reg_date desc limit $page, 5");
-    $row = mysql_num_rows($result);
-    $field = mysql_num_fields($result);
+    // 페이지 내용 검색
+    
+    $row = mysql_num_rows($result);         // 열의 개수
+    $field = mysql_num_fields($result);     // 행의 개수
 
     $All = mysql_query("select count(board_id) from ycj_first_board where board_pid = 0");
     $All = mysql_fetch_row($All);
-    $pageCount = ceil($All[0] / 5);
+    // 전체 게시글 개수 검색
+    
+    $pageCount = ceil($All[0] / 5);     // 게시글 개수 정리
 
     for ($i = 0; $i < $row; $i++) {
         $resultArr = mysql_fetch_row($result);
@@ -63,7 +69,11 @@
         echo "</tr>";
     }
     echo "</table>";
+    // 게시글 내용 출력
+    
     echo "<br>";
+    
+    // 페이지네이션
     echo "<div align='center'>";
 
     $nextPage = $inputPage;
@@ -158,10 +168,13 @@
     }
 
     echo "</div>";
+    // 페이지네이션
 
-    mysql_close($db_con);
+    mysql_close($db_con);   // DB연결 종료
 
     if (isset($_SESSION['userid'])) {
+        // 로그인 했을 경우
+        
         echo $_SESSION['name']."님이 로그인하셨습니다.<br>";
         echo "<form action=\"logout.php\">";
         echo "<input type=\"submit\" value=\"로그아웃\">";
@@ -173,6 +186,8 @@
         echo "</div>";
     }
     else {
+        // 로그인 되어 있지 않을 경우
+        
         echo "<form action=\"log_page.html\">";
         echo "<input type=\"submit\" value=\"로그인\">";
         echo "</form>";
