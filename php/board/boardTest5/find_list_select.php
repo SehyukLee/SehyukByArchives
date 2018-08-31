@@ -1,9 +1,11 @@
 <?php
-    $login_user_id = isset($_POST["userid"]) ? $_POST["userid"] : false;
-    $findText = isset($_POST["findView"]) ? $_POST["findView"] : false;
-    $nowPage = isset($_POST["page"]) ? $_POST["page"] : 1;
+    $login_user_id = isset($_POST["userid"]) ? $_POST["userid"] : false;    // 유저 아이디
+    $findText = isset($_POST["findView"]) ? $_POST["findView"] : false;     // 찾을 게시글 내용
+    $nowPage = isset($_POST["page"]) ? $_POST["page"] : 1;                  // 현재 페이지
 
     if (!$login_user_id) {
+        // 로그인 하지 않았을 경우
+        
         echo "no userid data";
         exit();
     }
@@ -14,28 +16,38 @@
         const USER_PASSWD = "autoset";
         const DB_NAME     = "shl_board";
     }
+    // DB연결에 사용할 값 정리
 
     class board_DB {
         function findListUp ($userid, $page, $text) {
         $db_con = new mysqli(DB_info::IP_ADRESS, DB_info::USER_NAME, DB_info::USER_PASSWD, DB_info::DB_NAME);
-
+        // DB 연결
+            
         if (!$db_con) {
             echo "DB connect fail";
             exit();
         }
 
-        $showPage = ($page * 5) - 5;
+        $showPage = ($page * 5) - 5;    // 보여줄 페이지 계산
 
         $board_list = $db_con->query("select * from board where board_name like '%$text%' order by board_idNum desc limit $showPage, 5");
-
+        // 보여줄 게시글 검색
+            
         if (!$board_list) {
+            // 검색 실패할 경우
+            
             echo "board select query fail";
         }
         else if ($board_list->num_rows == 0) {
+            // 찾는 게시글이 없을 경우
+            
             echo "no list data";
             exit();
         }
         else {
+            // 게시글이 있는 경우
+            
+            // 게시글 출력
             echo "<div align='center'>";
             echo "<table>";
             echo "<tr align='center'>";
@@ -59,7 +71,7 @@
             echo "<tr align='center'><td>글 번호</td><td>제목</td><td>글쓴이</td><td>작성 시간</td></tr>";
             echo "</thead>";
             echo "<tbody>";
-
+          
             for ($i = 0; $i < $board_list->num_rows; $i++) {
                 $board_list_re = $board_list->fetch_array(MYSQLI_NUM);
 
@@ -87,7 +99,9 @@
 
             echo "</tbody>";
             echo "</table>";
-
+            // 게시글 출력
+            
+            // 페이지네이션
             $board_list_page_count = $db_con->query("select count(board_idNum) from board where board_name like '%$text%';");
 
             if (!$board_list_page_count) {
@@ -145,6 +159,7 @@
                     echo "<a href='#' onclick='selectList($underShowPageStart+5)'>>></a>&nbsp;";
                 }
             }
+            // 페이지네이션
 
             echo "</div>";
             echo "</div>
@@ -153,11 +168,12 @@
                             <input type=\"text\" id='findView'>
                             <input type=\"button\" value=\"검색\" onclick='find()'>
                        </div>";
+            // 버튼 출력
 
         }
     }
 }
 
-$shl_board_db = new board_DB();
-$shl_board_db->findListUp($login_user_id, $nowPage, $findText);
+$shl_board_db = new board_DB();                                     // DB연결 객체 생성
+$shl_board_db->findListUp($login_user_id, $nowPage, $findText);     // 찾는 내용을 가진 게시글 
 ?>
