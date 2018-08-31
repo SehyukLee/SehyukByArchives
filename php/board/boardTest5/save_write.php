@@ -61,5 +61,5 @@
     }
 
     $shl_board_db = new board_DB();                                             // DB연결 객체 생성
-    $shl_board_db->save_write($inputTitle, $inputContent, $login_user_id);      // 게시글 
+    $shl_board_db->save_write($inputTitle, $inputContent, $login_user_id);      // 게시글 추가하기
 ?>
