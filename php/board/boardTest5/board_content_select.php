@@ -84,6 +84,6 @@
         }
     }
 
-    $shl_board_db = new board_DB();
-    $shl_board_db->veiwSelect($login_user_id, $board_idNum);
+    $shl_board_db = new board_DB();                             // DB연결 객체 생성
+    $shl_board_db->veiwSelect($login_user_id, $board_idNum);    // 게시글 
 ?>
