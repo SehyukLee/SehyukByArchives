@@ -50,5 +50,5 @@
     }
 
     $shl_board_db = new board_DB();         // DB연결 객체 생성
-    $shl_board_db->logout($login_user_id);  // 
+    $shl_board_db->logout($login_user_id);  // 로그아웃하기
 ?>
