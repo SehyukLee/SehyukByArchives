@@ -76,5 +76,5 @@
     }
 
 $shl_board_db = new board_DB();                             // DB연결 객체 생성
-$shl_board_db->viewSelect($login_user_id, $board_idNum);    // 게시글 
+$shl_board_db->viewSelect($login_user_id, $board_idNum);    // 게시글 출력하기
 ?>
