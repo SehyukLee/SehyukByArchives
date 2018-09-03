@@ -6,10 +6,11 @@
         const DB_userpass = "autoset";
         const DB_name = "chat";
     }
+    // DB연결에 사용할 값 정리
 
-    $roomNum = isset($_POST['roomNum']) ? $_POST['roomNum'] : false;
-    $createDeleteBtn = new chatDB();
-    $createDeleteBtn->createBtn($roomNum);
+    $roomNum = isset($_POST['roomNum']) ? $_POST['roomNum'] : false;    // 채팅방 번호
+    $createDeleteBtn = new chatDB();                                    // DB연결 객체 생성
+    $createDeleteBtn->createBtn($roomNum);                              // 채팅방 삭제
 
     class chatDB {
         function createBtn ($enterRoomNum) {
@@ -23,9 +24,11 @@
                 echo "DB connect fail";
                 exit();
             }
+            // DB연결
 
             $curtains = $db_con->query("select idNum from chatuser where roomNumber=$enterRoomNum and roomEnterNum=(select min(roomEnterNum) from chatuser where roomNumber=$enterRoomNum);");
-
+            // 채팅방 삭제
+            
             if ($curtains == false) {
                 echo "query send fail";
                 exit();
